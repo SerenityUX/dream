@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.dolby.millicast": "https://github.com/millicast/millicast-unity-sdk.git",
     "com.meta.xr.sdk.all": "62.0.0",
     "com.normalvr.normcore": "2.9.2",
     "com.unity.collab-proxy": "2.2.0",

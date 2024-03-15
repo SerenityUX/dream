@@ -1,5 +1,15 @@
 {
   "dependencies": {
+    "com.dolby.millicast": {
+      "version": "https://github.com/millicast/millicast-unity-sdk.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.inputsystem": "1.0.2"
+      },
+      "hash": "1b2156f1943909fe47c74543a7354854eee62fb7"
+    },
     "com.meta.xr.mrutilitykit": {
       "version": "62.0.0",
       "depth": 1,
@@ -217,7 +227,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.2.1",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
