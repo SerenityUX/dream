@@ -13,40 +13,60 @@ public class SphereData
 public class SphereSpawner : MonoBehaviour
 {
     public GameObject spherePrefab;
-    public GameObject cameraPrefab; // Reference to the camera prefab
     private List<SphereData> spheres = new List<SphereData>();
-    private GameObject cameraInstance;
+    private bool isRecording = false; // Flag to control recording
 
     void Start()
     {
-        // Instantiate the camera prefab at the start
-        cameraInstance = Instantiate(cameraPrefab, new Vector3(0, 0, -10), Quaternion.identity);
+        // Optionally, start recording automatically on start
+        // isRecording = true;
+        // StartCoroutine(SpawnSphereEverySecond());
+    }
 
-        StartCoroutine(SpawnSphereEverySecond());
+    void Update()
+    {
+        // Toggle recording on user input
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Space))
+        {
+            isRecording = !isRecording; // Toggle the recording state
+
+            if (isRecording)
+            {
+                // If starting to record, begin spawning spheres every second
+                StartCoroutine(SpawnSphereEverySecond());
+            }
+            // If stopping, you might want to stop the coroutine, but stopping a specific coroutine requires storing its reference
+            // Alternatively, modify the SpawnSphereEverySecond to check isRecording state
+        }
     }
 
     IEnumerator SpawnSphereEverySecond()
     {
-        while (true)
+        while (isRecording)
         {
             yield return new WaitForSeconds(1f); // Wait for 1 second
             SpawnSphere();
+            // You could also check isRecording inside here for additional control
         }
     }
 
     void SpawnSphere()
     {
-        // Use the camera instance's position and rotation to spawn spheres
-        GameObject sphere = Instantiate(spherePrefab, cameraInstance.transform.position, cameraInstance.transform.rotation);
-        SphereData data = new SphereData
+        if (isRecording && Camera.main != null)
         {
-            position = sphere.transform.position,
-            creationTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")
-        };
-        spheres.Add(data);
+            Vector3 cameraPosition = Camera.main.transform.position;
+            Quaternion cameraRotation = Camera.main.transform.rotation;
 
-        // Log the JSON representation of the sphere's data
-        Debug.Log(JsonUtility.ToJson(data));
+            GameObject sphere = Instantiate(spherePrefab, cameraPosition, cameraRotation);
+            SphereData data = new SphereData
+            {
+                position = sphere.transform.position,
+                creationTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK")
+            };
+            spheres.Add(data);
+
+            Debug.Log(JsonUtility.ToJson(data));
+        }
     }
 
     void SaveSpheresToJson()
@@ -57,6 +77,6 @@ public class SphereSpawner : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        SaveSpheresToJson(); // Save when application quits. Adjust as needed.
+        SaveSpheresToJson();
     }
 }
