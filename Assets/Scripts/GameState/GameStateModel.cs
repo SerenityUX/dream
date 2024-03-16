@@ -1,6 +1,7 @@
-using Normal.Realtime.Serialization;
-using System.Collections.Generic;
 using UnityEngine;
+using Normal.Realtime;
+using Normal.Realtime.Serialization;
+
 
 [RealtimeModel]
 public partial class GameStateModel
@@ -52,7 +53,18 @@ public partial class GameStateModel
     {
         if (_playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
-            playerState.points += points;
+            if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.DoublePoints)
+            {
+                playerState.points += points * 2;
+            }
+            else if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.HalfPoints)
+            {
+                playerState.points += points / 2;
+            }
+            else
+            {
+                playerState.points += points;
+            }
         }
         else
         {
@@ -76,7 +88,11 @@ public partial class GameStateModel
     {
         if (_playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
-            playerState.health -= damage;
+            if ((StatusEffectType)playerState.statusEffectType != StatusEffectType.Invincible)
+            {
+                playerState.health -= damage;
+            }
+
         }
         else
         {
@@ -84,23 +100,16 @@ public partial class GameStateModel
         }
     }
 
-    public void AddStatusEffect(uint playerID, int effectType, float duration)
-    {
-        if (_playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
-        {
-            playerState.statusEffectType = effectType;
-            playerState.statusEffectDuration = duration;
-        }
-        else
-        {
-            Debug.LogError("Invalid player ID.");
-        }
-    }
+
 
     public void AddPowerUp(uint playerID, int powerUpType)
     {
         if (_playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
+            if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.Silenced)
+            {
+                return;
+            }
             playerState.powerUpType = powerUpType;
         }
         else
@@ -113,7 +122,11 @@ public partial class GameStateModel
     {
         if (_playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
-            playerState.powerUpType = 0;
+            if ((StatusEffectType)playerState.statusEffectType != StatusEffectType.Silenced)
+            {
+                playerState.powerUpType = 0;
+            }
+
         }
         else
         {
