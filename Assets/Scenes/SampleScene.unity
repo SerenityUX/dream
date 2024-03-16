@@ -1867,7 +1867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 3239656064711296737, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
     type: 3}
-  coinSpacing: 1
+  coinSpacing: 0.5
   spherePrefab: {fileID: 3167000711426329318, guid: a79058c95cd8f4556a86f906ade1b6f8,
     type: 3}
 --- !u!1 &1395826366

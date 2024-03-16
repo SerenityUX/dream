@@ -14,7 +14,7 @@ public class SphereData
 public class SphereSpawner : MonoBehaviour
 {
     public GameObject coinPrefab; // Assign your coin prefab in the inspector
-    public float coinSpacing = 0.1f; // Distance between coins
+    public float coinSpacing = 1f; // Distance between coins
 
     public GameObject spherePrefab;
     private List<SphereData> spheres = new List<SphereData>();
