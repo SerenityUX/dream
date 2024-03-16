@@ -74,6 +74,8 @@ public class SphereSpawner : MonoBehaviour
     }
     void GenerateCoins()
     {
+        
+
         Debug.Log("Generate coins");
         GameObject[] pathPoints = GameObject.FindGameObjectsWithTag("Path");
 

@@ -62,6 +62,7 @@ public class CoinCapture : MonoBehaviour
 
     private void DestroyObject()
     {
+
         // Destroy the GameObject this script is attached to
         Realtime.Destroy(gameObject); // Use Realtime.Destroy to properly handle networked object destruction
     }
