@@ -2,6 +2,7 @@ using Normal.Realtime; // Normcore namespace
 using UnityEngine;
 
 public class CoinCapture : MonoBehaviour
+<<<<<<< HEAD
 {
 
     private ScoreDisplay scoreDisplay; // Reference to the ScoreDisplay component
@@ -31,16 +32,35 @@ public class CoinCapture : MonoBehaviour
         {
             Debug.LogError("RealtimeView component not found. Ensure it's attached to the object.");
         }
+=======
+{
+    private RealtimeView _realtimeView;
+    public float proximityDistance = 1f;
+    public AudioClip coinClip; // Assign this in the Unity Editor
+    private AudioSource audioSource;
+    private static float lastCoinTime = -2.0f; // Static to keep track across all instances
+    public float pitchIncreaseDuration = 2.0f; // Time in seconds to reset pitch
+    public float highPitch = 1.5f; // High pitch multiplier
+
+    void Start()
+    {
+        _realtimeView = GetComponent<RealtimeView>();
+        audioSource = gameObject.AddComponent<AudioSource>(); // Adding AudioSource dynamically
+        audioSource.clip = coinClip;
+
+        if (_realtimeView == null)
+        {
+            Debug.LogError("RealtimeView component not found. Ensure it's attached to the object.");
+        }
+>>>>>>> 4d4aa5c (ese)
     }
 
     void Update()
     {
-        // Find the GameObject tagged as MainCamera (usually the player)
         GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         if (mainCamera != null)
         {
             float distance = Vector3.Distance(mainCamera.transform.position, transform.position);
-            // Check if the MainCamera is within the specified proximity
             if (distance <= proximityDistance)
             {
                 AttemptDestruction();
@@ -52,36 +72,47 @@ public class CoinCapture : MonoBehaviour
     {
         if (_realtimeView.isOwnedLocallyInHierarchy)
         {
-            // The client already owns the object, proceed with destruction
+            PlayCoinSound();
             DestroyObject();
         }
         else
         {
-            // Request ownership before destruction
             _realtimeView.RequestOwnership();
-            // Listen for ownership changes
             _realtimeView.ownerIDSelfDidChange += OwnershipChanged;
         }
     }
 
     private void OwnershipChanged(RealtimeView realtimeView, int previousOwnerID)
     {
-        // Check again if this client now owns the object
         if (_realtimeView.isOwnedLocallyInHierarchy)
         {
-            // Proceed with destruction as the client now has ownership
+            PlayCoinSound();
             DestroyObject();
         }
-
-        // Unsubscribe from the event to avoid potential memory leaks or unwanted behavior
         _realtimeView.ownerIDSelfDidChange -= OwnershipChanged;
     }
 
     private void DestroyObject()
+<<<<<<< HEAD
     {
         scoreDisplay.IncreaseScore(1); // Increase the score using ScoreDisplay component
+=======
+    {
+        Realtime.Destroy(gameObject);
+    }
+>>>>>>> 4d4aa5c (ese)
 
-        // Destroy the GameObject this script is attached to
-        Realtime.Destroy(gameObject); // Use Realtime.Destroy to properly handle networked object destruction
+    private void PlayCoinSound()
+    {
+        if (Time.time - lastCoinTime <= pitchIncreaseDuration)
+        {
+            audioSource.pitch = highPitch; // Play sound at a higher pitch
+        }
+        else
+        {
+            audioSource.pitch = 1.0f; // Normal pitch
+        }
+        audioSource.Play();
+        lastCoinTime = Time.time; // Update the last coin capture time
     }
 }
