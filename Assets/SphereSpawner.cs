@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Normal.Realtime;
+using UnityEngine.Networking;
 
 [Serializable]
 public class SphereData
 {
     public Vector3 position;
     public string creationTime;
+}
+
+[Serializable]
+public class SpheresCollection
+{
+    public List<SphereData> spheres = new List<SphereData>();
 }
 
 public class SphereSpawner : MonoBehaviour
@@ -81,6 +88,8 @@ public class SphereSpawner : MonoBehaviour
     }
     void GenerateCoins()
     {
+        StartCoroutine(SendSpheresData());
+
 
         _gameStateSync.AddPointsToPlayer(1);
         Debug.Log("Generate coins");
@@ -130,14 +139,47 @@ public class SphereSpawner : MonoBehaviour
     }
 
 
+
+
     void SaveSpheresToJson()
     {
         string json = JsonUtility.ToJson(new { spheres = spheres }, true);
         System.IO.File.WriteAllText(Application.persistentDataPath + "/spheres.json", json);
     }
 
+
+
     void OnApplicationQuit()
     {
         SaveSpheresToJson();
+    }
+
+    IEnumerator SendSpheresData()
+    {
+        SpheresCollection collection = new SpheresCollection { spheres = this.spheres };
+
+        // Randomly generate a name consisting of 4 digits
+        string name = UnityEngine.Random.Range(1000, 9999).ToString();
+
+        // Serialize the data to JSON
+        string jsonData = JsonUtility.ToJson(new { name = name, path = collection });
+
+        // Create a UnityWebRequest to POST the JSON data
+        using (UnityWebRequest www = UnityWebRequest.PostWwwForm("https://x8ki-letl-twmt.n7.xano.io/api:7v6zckRK/paths", jsonData))
+        {
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            // Send the request and wait for a response
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error sending spheres data: " + www.error);
+            }
+            else
+            {
+                Debug.Log("Successfully sent spheres data. Response: " + www.downloadHandler.text);
+            }
+        }
     }
 }
