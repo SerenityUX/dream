@@ -13,7 +13,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
     private void EnterPlayerDelayed()
     {
-        EnterPlayer("ralph");
+        EnterPlayer("Bill");
         AddPointsToPlayer(1);
 
     }
