@@ -32,37 +32,43 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     }
 
     // Public method to interact with the GameStateModel
-    public string EnterPlayer(int playerID)
+    public string EnterPlayer()
     {
+        int playedID = Realtime.clientID();
         return model.EnterPlayer(playerID);
     }
 
-    public void ExitPlayer(int playerID)
+    public void ExitPlayer()
     {
+        int playedID = Realtime.clientID();
         model.ExitPlayer(playerID);
     }
 
-    public void AddPointsToPlayer(int playerID, int points)
+    public void AddPointsToPlayer(int points)
     {
+        int playedID = Realtime.clientID();
         // Utilize the model's method
         model.AddPoints(playerID, points);
     }
 
     // Example method to add laps to a player
-    public void AddLapToPlayer(int playerID)
+    public void AddLapToPlayer()
     {
+        int playedID = Realtime.clientID();
         // Utilize the model's method
         model.AddLap(playerID);
     }
 
-    public void DealDamageToPlayer(int playerID, int damage)
+    public void TakeDamage(int damage)
     {
+        int playedID = Realtime.clientID();
         // Utilize the model's method
         model.TakeDamage(playerID, damage);
     }
 
-    public void GivePlayerPowerUp(int playerID, int powerUpType)
+    public void GetPowerUp(int powerUpType)
     {
+        int playedID = Realtime.clientID();
         // Check if the user has a powerup
         if (model.playerStates[model.GetPlayerIndex(playerID)].powerUpType == 0)
         {
@@ -70,8 +76,9 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             model.AddPowerUp(playerID, powerUpType);
         }
     }
-    public void AddStatusEffectToPlayer(int playerID, int effectType, float duration)
+    public void InflictStatusEffect(int effectType, float duration)
     {
+        int playedID = Realtime.clientID();
         // Utilize the model's method
         model.AddStatusEffect(playerID, effectType, duration);
     }
