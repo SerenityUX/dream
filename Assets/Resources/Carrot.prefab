@@ -196,9 +196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   proximityDistance: 1
-  coinClip: {fileID: 8300000, guid: 44653d5da0faf4cca8aeeb80d1faa476, type: 3}
-  pitchIncreaseDuration: 2
-  highPitch: 1.5
 --- !u!82 &659557003815377472
 AudioSource:
   m_ObjectHideFlags: 0
