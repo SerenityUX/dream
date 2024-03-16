@@ -13,7 +13,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
     private void EnterPlayerDelayed()
     {
-        EnterPlayer("ralph");
+        EnterPlayer("Bill");
         AddPointsToPlayer(1);
 
     }
@@ -107,12 +107,12 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     {
         Debug.Log(realtime.clientID);
 
-        if(realtime.clientID < 0)
+        if (realtime.clientID < 0)
         {
             return null;
         }
         uint playerID = (uint)realtime.clientID;
-        
+
         return model.EnterPlayer(playerID, name);
     }
 
@@ -141,13 +141,11 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             {
                 playerState.points += points;
             }
-            Debug.Log("Adding");
-            Debug.Log(playerID);
         }
         else
         {
             Debug.Log("Invalid player ID.");
-            Debug.LogError(playerID);
+            Debug.Log(playerID);
         }
     }
 
@@ -255,8 +253,6 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         uint playerID = (uint)realtime.clientID;
         if (model.playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
-            Debug.Log(playerID);
-            Debug.Log(playerState.points);
             return playerState.points;
         }
         else

@@ -1,5 +1,9 @@
-using System;
 using UnityEngine;
+using UnityEngine.UI; // Add this line
+using TMPro;
+using System.Collections.Generic;
+using System;
+
 
 // Define a class to hold the properties for each game object
 [Serializable]
@@ -38,12 +42,51 @@ public class CarrotLeaderBoard : MonoBehaviour
 
 
     }
+    private void Start()
+    {
+        // Check and cache TextMeshProUGUI components
+        for (int i = 0; i < gamePropertiesArray.Length; i++)
+        {
+            if (gamePropertiesArray[i].name != null)
+                gamePropertiesArray[i].name.GetComponent<TextMeshPro>(); // Cache this if needed
+
+            if (gamePropertiesArray[i].score != null)
+                gamePropertiesArray[i].score.GetComponent<TextMeshPro>(); // Cache this if needed
+        }
+    }
 
     private void Update()
     {
-        Debug.Log("states:");
-        Debug.Log(_gameStateSync.GetAllPlayerStates());
-    }
+        List<Tuple<string, int>> sortedPlayerStates = _gameStateSync.GetPlayerNamesAndPoints();
 
+        for (int i = 0; i < gamePropertiesArray.Length; i++)
+        {
+            var nameText = gamePropertiesArray[i]?.name?.GetComponent<TextMeshPro>();
+            var scoreText = gamePropertiesArray[i]?.score?.GetComponent<TextMeshPro>();
+
+            if (i < sortedPlayerStates.Count)
+            {
+                if (nameText != null)
+                    nameText.text = sortedPlayerStates[i].Item1;
+
+                if (scoreText != null)
+                    scoreText.text = sortedPlayerStates[i].Item2.ToString();
+
+                if (gamePropertiesArray[i]?.carrotIcon != null)
+                    gamePropertiesArray[i].carrotIcon.SetActive(true);
+            }
+            else
+            {
+                if (nameText != null)
+                    nameText.text = "";
+
+                if (scoreText != null)
+                    scoreText.text = "";
+
+                if (gamePropertiesArray[i]?.carrotIcon != null)
+                    gamePropertiesArray[i].carrotIcon.SetActive(false);
+            }
+        }
+    }
 
 }
