@@ -7,9 +7,8 @@ public class EnvironmentSync : RealtimeComponent<EnvironmentStateModel>
 {
     [SerializeField] private string environmentDataPath = "Path/To/Your/JSON.json";
 
-    private void LoadJson()
+    public void LoadJson()
     {
-
         LoadEnvironmentDataFromJSON();
     }
 

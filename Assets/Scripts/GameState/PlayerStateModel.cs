@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Normal.Realtime.Serialization; // Ensure you have this using directive for RealtimeModel and RealtimeProperty attributes
 
-public enum PowerUpType { GreenShell, RedShell, Banana, Star }
+public enum PowerUpType { GreenCarrot, RedCarrot, CarrotPeels, GoldenCarrot }
 public enum StatusEffectType { Silenced, Invincible, Blind, HalfPoints, DoublePoints }
 
 
