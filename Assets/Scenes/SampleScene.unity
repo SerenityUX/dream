@@ -980,6 +980,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 304719693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &773190231 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114501696213753918, guid: fca9d4afb3743274e8f7da14019d7e0b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1358568756}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1424795628, guid: ebae63e7edba59945a994528ada1f7a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &796926170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,6 +1475,10 @@ PrefabInstance:
     - target: {fileID: 1572161834460568, guid: fca9d4afb3743274e8f7da14019d7e0b, type: 3}
       propertyPath: m_Name
       value: Realtime + VR Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572161834460568, guid: fca9d4afb3743274e8f7da14019d7e0b, type: 3}
+      propertyPath: m_TagString
+      value: realTime
       objectReference: {fileID: 0}
     - target: {fileID: 4520454903943832, guid: fca9d4afb3743274e8f7da14019d7e0b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1992,20 +2008,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2685975850439010749, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3239656064711296737, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
         type: 3}
       propertyPath: m_Name
       value: Sphere
       objectReference: {fileID: 0}
-    - target: {fileID: 3239656064711296737, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
+    - target: {fileID: 6057438927758716933, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: _realtime
+      value: 
+      objectReference: {fileID: 773190231}
+    - target: {fileID: 6057438927758716933, guid: 3461b9bb2cf9d4a619fc3eceb13d0c2b,
+        type: 3}
+      propertyPath: _viewUUID
+      value: 5ed6b38e-7392-4c07-a25c-7deea15e765a
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

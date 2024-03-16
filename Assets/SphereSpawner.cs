@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Normal.Realtime;
 
 [Serializable]
 public class SphereData
@@ -71,11 +72,8 @@ public class SphereSpawner : MonoBehaviour
             Debug.Log(JsonUtility.ToJson(data));
         }
     }
-
     void GenerateCoins()
     {
-
-
         Debug.Log("Generate coins");
         GameObject[] pathPoints = GameObject.FindGameObjectsWithTag("Path");
 
@@ -104,21 +102,24 @@ public class SphereSpawner : MonoBehaviour
                 // Only instantiate the coin if the random number is less than 0.6
                 if (chance < 0.6f)
                 {
-                    Instantiate(coinPrefab, coinPosition, Quaternion.identity);
-                }
+                    GameObject coin = Realtime.Instantiate("Carrot", coinPosition, Quaternion.identity);
 
+                    // Find the parent GameObject with the "realTime" tag
+                    GameObject realTimeParent = GameObject.FindGameObjectWithTag("realTime");
+                    if (realTimeParent != null)
+                    {
+                        // Set the coin's parent to the found GameObject
+                        coin.transform.SetParent(realTimeParent.transform);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No GameObject found with the 'realTime' tag. Coin instantiated without a parent.");
+                    }
+                }
             }
         }
-        LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        PathConnector PathConnector = GetComponent<PathConnector>();
-
-        if (lineRenderer != null)
-        {
-            Destroy(PathConnector);
-
-            Destroy(lineRenderer);
-        }
     }
+
 
     void SaveSpheresToJson()
     {

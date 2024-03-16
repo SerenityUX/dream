@@ -7,6 +7,7 @@ Library: /Users/thomasstubblefield/Developer/dream/Temp/BurstOutput/tempburstlib
 --dump=Function
 --float-precision=Standard
 --assembly-defines=Assembly-CSharp;
+--assembly-defines=Meta.XR.Audio;
 --assembly-defines=Meta.XR.BuildingBlocks;
 --assembly-defines=meta.xr.mrutilitykit;
 --assembly-defines=Mono.Security;
@@ -96,6 +97,7 @@ Library: /Users/thomasstubblefield/Developer/dream/Temp/BurstOutput/tempburstlib
 --float-precision=Standard
 --float-mode=Fast
 --assembly-defines=Assembly-CSharp;
+--assembly-defines=Meta.XR.Audio;
 --assembly-defines=Meta.XR.BuildingBlocks;
 --assembly-defines=meta.xr.mrutilitykit;
 --assembly-defines=Mono.Security;
