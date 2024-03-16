@@ -18,6 +18,7 @@ public partial class GameStateModel
 
     public string EnterPlayer(uint playerID, string playerName)
     {
+        Debug.Log(playerID);
         if (!_playerstates.ContainsKey(playerID))
         {
             var newPlayerState = new PlayerStateModel
@@ -44,7 +45,7 @@ public partial class GameStateModel
         }
         else
         {
-            Debug.LogError("Player already exists.");
+            Debug.Log("Player already exists.");
             return "Player already exists.";
         }
     }
@@ -68,7 +69,7 @@ public partial class GameStateModel
         }
         else
         {
-            Debug.LogError("Invalid player ID.");
+            Debug.Log("Invalid player ID.");
         }
     }
 

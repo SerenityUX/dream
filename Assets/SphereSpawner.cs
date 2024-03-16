@@ -20,6 +20,13 @@ public class SphereSpawner : MonoBehaviour
     private List<SphereData> spheres = new List<SphereData>();
     private bool isRecording = false; // Flag to control recording
 
+    private GameStateSync _gameStateSync; // Reference to the ScoreDisplay component
+
+    private void Awake()
+    {
+        _gameStateSync = GetComponent<GameStateSync>();
+
+    }
     void Update()
     {
         // Toggle recording on user input
@@ -74,8 +81,8 @@ public class SphereSpawner : MonoBehaviour
     }
     void GenerateCoins()
     {
-        
 
+        _gameStateSync.AddPointsToPlayer(1);
         Debug.Log("Generate coins");
         GameObject[] pathPoints = GameObject.FindGameObjectsWithTag("Path");
 
