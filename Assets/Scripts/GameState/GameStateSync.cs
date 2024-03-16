@@ -4,6 +4,10 @@ using Normal.Realtime.Serialization;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
+    private void Start()
+    {
+        EnterPlayer("ralph");
+    }
     // Update function, called once per frame
     private void Update()
     {
