@@ -55,6 +55,7 @@ public class CoinCapture : MonoBehaviour
             // The client already owns the object, proceed with destruction
             DestroyObject();
         }
+
         else
         {
             // Request ownership before destruction
