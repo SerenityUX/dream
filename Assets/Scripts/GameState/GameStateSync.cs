@@ -1,6 +1,8 @@
 using UnityEngine;
 using Normal.Realtime;
 using Normal.Realtime.Serialization;
+using System.Collections.Generic;
+using System;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
@@ -32,8 +34,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         RealtimeDictionary<PlayerStateModel> playerStates = GetAllPlayerStates();
 
         // Get current player's ID
-        uint playerID = (uint)realtime.clientID;
-        PlayerStateModel playerState = model.playerstates[playerID];
+
     }
 
     protected override void OnRealtimeModelReplaced(GameStateModel previousModel, GameStateModel currentModel)
@@ -184,6 +185,42 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
     public RealtimeDictionary<PlayerStateModel> GetAllPlayerStates()
     {
+
+
         return model.playerstates;
+    }
+
+    public List<Tuple<string, int>> GetPlayerNamesAndPoints()
+    {
+        List<Tuple<string, int>> playerNamesAndPoints = new List<Tuple<string, int>>();
+
+        var enumerator = model.playerstates.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var currentPlayer = enumerator.Current;
+            // currentPlayer.Key is the uint ID, currentPlayer.Value is the PlayerStateModel
+            var playerState = currentPlayer.Value;
+
+            playerNamesAndPoints.Add(new Tuple<string, int>(playerState.name, playerState.points));
+        }
+
+        // Sort so the player with the most points is first
+        playerNamesAndPoints.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+
+        return playerNamesAndPoints;
+    }
+
+    public int GetPlayerPoints()
+    {
+        uint playerID = (uint)realtime.clientID;
+        if (model.playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
+        {
+            return playerState.points;
+        }
+        else
+        {
+            Debug.LogError("Invalid player ID.");
+            return 0;
+        }
     }
 }
