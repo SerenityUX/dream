@@ -9,14 +9,22 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     {
         if (previousModel != null)
         {
-            // Here, you could unregister from events on the previous model
-            // if you had any events to unregister.
+            previousModel.playerStatesDidChange -= PlayerStateDidChange;
         }
 
         if (currentModel != null)
         {
-            // Here, you would register for events on the current model
-            // if you have any events to listen to.
+            if (currentModel.isFreshModel)
+            {
+                // If Model has no data, we update with local data
+
+            }
+
+            UpdateLeaderboard();
+            UpdatePersonal();
+
+            // Initialize the model
+            currentModel.playerStatesDidChange += PlayerStateDidChange;
         }
     }
 
@@ -59,11 +67,27 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             model.AddPowerUp(playerID, powerUpType);
         }
     }
-
     public void AddStatusEffectToPlayer(int playerID, int effectType, float duration)
     {
         // Utilize the model's method
         model.AddStatusEffect(playerID, effectType, duration);
+    }
+
+    private void PlayerStateDidChange(PlayerStateModel model, RealtimeArray<PlayerStateModel> playerStates)
+    {
+        // Do something with the player state, eg render leaderboard
+        UpdateLeaderboard();
+        UpdatePersonal();
+    }
+
+    private void UpdateLeaderboard()
+    {
+        // Update the canvas
+    }
+
+    private void UpdatePersonal()
+    {
+        // Update the personal stats
     }
 
     public RealtimeArray<PlayerStateModel> GetAllPlayerStates()
