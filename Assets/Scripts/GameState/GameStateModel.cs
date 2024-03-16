@@ -8,6 +8,16 @@ public partial class GameStateModel
     [RealtimeProperty(1, true, true)]
     private RealtimeDictionary<PlayerStateModel> _playerstates;
 
+    // 0 = waiting, 1 = playing, 2 = finished
+    [RealtimeProperty(2, true, true)]
+    private int _gameState;
+
+    [RealtimeProperty(3, true, true)]
+    private int _prepTimeRemaining;
+
+    [RealtimeProperty(4, true, true)]
+    private int _gameTimeRemaining;
+
     public string EnterPlayer(uint playerID, string playerName)
     {
         if (!_playerstates.ContainsKey(playerID))
@@ -20,8 +30,17 @@ public partial class GameStateModel
                 name = playerName,
                 powerUpType = 0,
                 statusEffectType = 0,
-                statusEffectDuration = 0
+                statusEffectDuration = 0,
+                ready = false
             };
+            if (_playerstates.Count == 0)
+            {
+                newPlayerState.first = true;
+            }
+            else
+            {
+                newPlayerState.first = false;
+            }
             _playerstates.Add(playerID, newPlayerState);
             return "Player added.";
         }
@@ -129,30 +148,4 @@ public partial class GameStateModel
             return null;
         }
     }
-
-
-    // This method decrements the duration of status effects for all players
-    public void UpdateStatusEffects()
-    {
-        // Use GetEnumerator to iterate through the RealtimeDictionary
-        var enumerator = _playerstates.GetEnumerator();
-        while (enumerator.MoveNext())
-        {
-            var currentPlayer = enumerator.Current;
-            // currentPlayer.Key is the uint ID, currentPlayer.Value is the PlayerStateModel
-            var playerState = currentPlayer.Value;
-
-            if (playerState.statusEffectDuration > 0)
-            {
-                playerState.statusEffectDuration -= Time.deltaTime;
-                if (playerState.statusEffectDuration <= 0)
-                {
-                    playerState.statusEffectType = 0;
-                    playerState.statusEffectDuration = 0;
-                }
-            }
-        }
-    }
-
-
 }

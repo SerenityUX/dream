@@ -11,24 +11,30 @@ public enum StatusEffectType { Silenced, Invincible, Blind, HalfPoints, DoublePo
 [RealtimeModel]
 public partial class PlayerStateModel
 {
-    [RealtimeProperty(1, true, true)]
+    [RealtimeProperty(1, true, false)]
     private int _laps;
 
-    [RealtimeProperty(2, true, true)]
+    [RealtimeProperty(2, true, false)]
     private int _points;
 
-    [RealtimeProperty(3, true, true)]
+    [RealtimeProperty(3, true, false)]
     private int _health;
 
-    [RealtimeProperty(4, true, true)]
+    [RealtimeProperty(4, true, false)]
     private string _name;
 
 
-    [RealtimeProperty(5, true, true)]
+    [RealtimeProperty(5, true, false)]
     private int _powerUpType;
 
-    [RealtimeProperty(6, true, true)]
+    [RealtimeProperty(6, true, false)]
     private int _statusEffectType;
-    [RealtimeProperty(7, true, true)]
+    [RealtimeProperty(7, true, false)]
     private float _statusEffectDuration;
+
+    [RealtimeProperty(8, true, false)]
+    private bool _first;
+
+    [RealtimeProperty(9, true, false)]
+    private bool _ready;
 }

@@ -4,6 +4,76 @@ using Normal.Realtime.Serialization;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
+    // Update function, called once per frame
+    private void Update()
+    {
+        if (!realtime.connected)
+        {
+            return;
+        }
+
+        if (model.gameState === 0)
+        {
+            return;
+        }
+
+        if (mode.prepTimeRemaining > 0)
+        {
+            model.prepTimeRemaining -= Time.deltaTime;
+        }
+        else if (model.gameTimeRemaining > 0)
+        {
+            model.gameTimeRemaining -= Time.deltaTime;
+        }
+        else
+        {
+            model.gameState = 2;
+            return;
+        }
+
+        // Update the status effects
+        UpdateStatusEffects();
+
+        // Get all the player states
+        RealtimeDictionary<PlayerStateModel> playerStates = GetAllPlayerStates();
+
+        // Get current player's ID
+        uint playerID = (uint)realtime.clientID;
+        PlayerStateModel playerState = model.playerStates[playerID];
+    }
+
+    public string ReadyUp()
+    {
+        uint playerID = (uint)realtime.clientID;
+        model[playerID].ready = true;
+
+        // Check if all players are ready
+        bool allReady = true;
+
+        var enumerator = model.playerStates.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var currentPlayer = enumerator.Current;
+            // currentPlayer.Key is the uint ID, currentPlayer.Value is the PlayerStateModel
+            var playerState = currentPlayer.Value;
+
+            if (!playerState.ready)
+            {
+                allReady = false;
+                break;
+            }
+        }
+
+        if (allReady)
+        {
+            // Start the game
+            model.gameState = 1;
+            model.prepTimeRemaining = 3;
+            model.gameTimeRemaining = 60;
+        }
+
+    }
+
     // Public method to interact with the GameStateModel
     public string EnterPlayer(string name)
     {
@@ -55,8 +125,23 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
     public void UpdateStatusEffects()
     {
-        // Utilize the model's method
-        model.UpdateStatusEffects();
+        var enumerator = model.playerstates.GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+            var currentPlayer = enumerator.Current;
+            // currentPlayer.Key is the uint ID, currentPlayer.Value is the PlayerStateModel
+            var playerState = currentPlayer.Value;
+
+            if (playerState.statusEffectDuration > 0)
+            {
+                playerState.statusEffectDuration -= Time.deltaTime;
+                if (playerState.statusEffectDuration <= 0)
+                {
+                    playerState.statusEffectType = 0;
+                    playerState.statusEffectDuration = 0;
+                }
+            }
+        }
     }
 
     public RealtimeDictionary<PlayerStateModel> GetAllPlayerStates()
