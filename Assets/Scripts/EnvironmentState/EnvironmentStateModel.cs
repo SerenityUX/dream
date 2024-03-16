@@ -1,4 +1,6 @@
-//using Normal.Realtime.Serialization;
+using Normal.Realtime.Serialization;
+using System.Collections.Generic;
+using UnityEngine;
 
 //[RealtimeModel]
 //public partial class EnvironmentStateModel

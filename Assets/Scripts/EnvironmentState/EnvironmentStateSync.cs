@@ -7,11 +7,11 @@
 //{
 //    [SerializeField] private string environmentDataPath = "Path/To/Your/JSON.json";
 
-//    protected override void Start()
-//    {
-//        base.Start();
-//        LoadEnvironmentDataFromJSON();
-//    }
+    private void LoadJson()
+    {
+
+        LoadEnvironmentDataFromJSON();
+    }
 
 //    private void LoadEnvironmentDataFromJSON()
 //    {
