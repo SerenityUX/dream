@@ -132,11 +132,32 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         model.AddPowerUp(playerID, powerUpType);
     }
 
-    public void InflictStatusEffect(int effectType, float duration)
+    public void AddStatusEffect(int effectType, float duration)
     {
-        // Utilize the model's method
         uint playerID = (uint)realtime.clientID;
-        model.AddStatusEffect(playerID, effectType, duration);
+        if (model.playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
+        {
+            var CastedType = (StatusEffectType)effectType;
+            if (CastedType == StatusEffectType.DoublePoints || CastedType == StatusEffectType.Invincible)
+            {
+                playerState.statusEffectType = effectType;
+                playerState.statusEffectDuration = duration;
+                playerState.statusEffectStartTime = (float)realtime.room.time;
+                return;
+            }
+            else if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.Invincible)
+            {
+                return;
+            }
+
+            playerState.statusEffectType = effectType;
+            playerState.statusEffectDuration = duration;
+            playerState.statusEffectStartTime = (float)realtime.room.time;
+        }
+        else
+        {
+            Debug.LogError("Invalid player ID.");
+        }
     }
 
     public void UpdateStatusEffects()

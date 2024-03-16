@@ -6,8 +6,6 @@ using Normal.Realtime.Serialization; // Ensure you have this using directive for
 public enum PowerUpType { GreenCarrot, RedCarrot, CarrotPeels, GoldenCarrot }
 public enum StatusEffectType { Silenced, Invincible, Blind, HalfPoints, DoublePoints }
 
-
-
 [RealtimeModel]
 public partial class PlayerStateModel
 {
