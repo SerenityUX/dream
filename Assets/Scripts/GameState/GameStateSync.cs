@@ -1,6 +1,7 @@
 using UnityEngine;
 using Normal.Realtime;
 using Normal.Realtime.Serialization;
+using Normal.Realtime;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
@@ -12,23 +13,14 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             return;
         }
 
-        if (model.gameState === 0)
+        if (model.gameState == 0 || model.gameState == 2)
         {
             return;
         }
 
-        if (mode.prepTimeRemaining > 0)
-        {
-            model.prepTimeRemaining -= Time.deltaTime;
-        }
-        else if (model.gameTimeRemaining > 0)
-        {
-            model.gameTimeRemaining -= Time.deltaTime;
-        }
-        else
+        if (Time > 63)
         {
             model.gameState = 2;
-            return;
         }
 
         // Update the status effects
@@ -39,18 +31,33 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
         // Get current player's ID
         uint playerID = (uint)realtime.clientID;
-        PlayerStateModel playerState = model.playerStates[playerID];
+        PlayerStateModel playerState = model.playerstates[playerID];
     }
 
-    public string ReadyUp()
+    public float Time
+    {
+        get
+        {
+            // Return 0 if we're not connected to the room yet.
+            if (model == null) return 0.0f;
+
+            // Make sure the stopwatch is running
+            if (model.startTime == 0.0) return 0.0f;
+
+            // Calculate how much time has passed
+            return (float)(realtime.room.time - model.startTime);
+        }
+    }
+
+    public void ReadyUp()
     {
         uint playerID = (uint)realtime.clientID;
-        model[playerID].ready = true;
+        model.playerstates[playerID].ready = true;
 
         // Check if all players are ready
         bool allReady = true;
 
-        var enumerator = model.playerStates.GetEnumerator();
+        var enumerator = model.playerstates.GetEnumerator();
         while (enumerator.MoveNext())
         {
             var currentPlayer = enumerator.Current;
@@ -68,8 +75,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         {
             // Start the game
             model.gameState = 1;
-            model.prepTimeRemaining = 3;
-            model.gameTimeRemaining = 60;
+            model.startTime = realtime.room.time;
         }
 
     }
@@ -132,10 +138,11 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             // currentPlayer.Key is the uint ID, currentPlayer.Value is the PlayerStateModel
             var playerState = currentPlayer.Value;
 
-            if (playerState.statusEffectDuration > 0)
+            if (playerState.statusEffectType != 0)
             {
-                playerState.statusEffectDuration -= Time.deltaTime;
-                if (playerState.statusEffectDuration <= 0)
+                var timePassed = (float)(realtime.room.time - playerState.statusEffectStartTime);
+
+                if (timePassed > playerState.statusEffectDuration)
                 {
                     playerState.statusEffectType = 0;
                     playerState.statusEffectDuration = 0;

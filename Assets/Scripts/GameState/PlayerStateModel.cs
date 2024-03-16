@@ -37,4 +37,7 @@ public partial class PlayerStateModel
 
     [RealtimeProperty(9, true, false)]
     private bool _ready;
+
+    [RealtimeProperty(10, true, false)]
+    private float _statusEffectStartTime;
 }

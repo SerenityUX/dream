@@ -5,18 +5,15 @@ using UnityEngine;
 [RealtimeModel]
 public partial class GameStateModel
 {
-    [RealtimeProperty(1, true, true)]
+    [RealtimeProperty(1, true, false)]
     private RealtimeDictionary<PlayerStateModel> _playerstates;
 
     // 0 = waiting, 1 = playing, 2 = finished
-    [RealtimeProperty(2, true, true)]
+    [RealtimeProperty(2, true, false)]
     private int _gameState;
 
-    [RealtimeProperty(3, true, true)]
-    private int _prepTimeRemaining;
-
-    [RealtimeProperty(4, true, true)]
-    private int _gameTimeRemaining;
+    [RealtimeProperty(3, true, false)]
+    private double _startTime;
 
     public string EnterPlayer(uint playerID, string playerName)
     {
