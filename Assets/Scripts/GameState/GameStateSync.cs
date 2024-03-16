@@ -32,10 +32,10 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     }
 
     // Public method to interact with the GameStateModel
-    public string EnterPlayer()
+    public string EnterPlayer(string name)
     {
         int playedID = Realtime.clientID();
-        return model.EnterPlayer(playerID);
+        return model.EnterPlayer(playerID, name);
     }
 
     public void ExitPlayer()
