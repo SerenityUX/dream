@@ -68,9 +68,13 @@ public class CarrotLeaderBoard : MonoBehaviour
             {
                 if (nameText != null)
                     nameText.text = sortedPlayerStates[i].Item1;
+                else
+                    nameText.text = "";
 
                 if (scoreText != null)
                     scoreText.text = sortedPlayerStates[i].Item2.ToString();
+                else
+                    scoreText.text = "";
 
                 if (gamePropertiesArray[i]?.carrotIcon != null)
                     gamePropertiesArray[i].carrotIcon.SetActive(true);
