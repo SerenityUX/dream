@@ -7,9 +7,9 @@ public class EnvironmentSync : RealtimeComponent<EnvironmentStateModel>
 {
     [SerializeField] private string environmentDataPath = "Path/To/Your/JSON.json";
 
-    protected override void Start()
+    private void LoadJson()
     {
-        base.Start();
+
         LoadEnvironmentDataFromJSON();
     }
 

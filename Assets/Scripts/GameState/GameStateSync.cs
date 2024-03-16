@@ -1,15 +1,9 @@
 using UnityEngine;
 using Normal.Realtime;
+using Normal.Realtime.Serialization;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
-
-    protected override void Start()
-    {
-        base.Start();
-
-        // Additional initialization if needed
-    }
 
     protected override void OnRealtimeModelReplaced(GameStateModel previousModel, GameStateModel currentModel)
     {
@@ -62,7 +56,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         if (model.playerStates[model.GetPlayerIndex(playerID)].powerUpType == 0)
         {
             // Utilize the model's method
-            model.GivePowerUp(playerID, powerUpType);
+            model.AddPowerUp(playerID, powerUpType);
         }
     }
 
@@ -77,7 +71,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         return model.getAllPlayerStates();
     }
 
-    public RealtimeArray<int> GetAllPlayerIDs()
+    public RealtimeArray<IntModel> GetAllPlayerIDs()
     {
         return model.getAllPlayerIDs();
     }

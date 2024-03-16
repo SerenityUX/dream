@@ -9,7 +9,7 @@ public enum StatusEffectType { Silenced, Invincible, Blind, HalfPoints, DoublePo
 
 
 [RealtimeModel]
-public partial class PlayerModel
+public partial class PlayerStateModel
 {
     [RealtimeProperty(1, true, true)]
     private int _laps;
@@ -29,40 +29,5 @@ public partial class PlayerModel
     [RealtimeProperty(7, true, true)]
     private float _statusEffectDuration;
 
-    // Properties to access laps, points, and health
-    public int laps
-    {
-        get { return _laps; }
-        set { _laps = value; }
-    }
 
-    public int points
-    {
-        get { return _points; }
-        set { _points = value; }
-    }
-
-    public int health // Getter for health
-    {
-        get { return _health; }
-        set { _health = value; }
-    }
-
-    public int powerUpType
-    {
-        get { return _powerUpType; }
-        set { _powerUpType = value; }
-    }
-
-    public int statusEffectType
-    {
-        get { return _statusEffectType; }
-        set { _statusEffectType = value; }
-    }
-
-    public float statusEffectDuration
-    {
-        get { return _statusEffectDuration; }
-        set { _statusEffectDuration = value; }
-    }
 }

@@ -9,29 +9,32 @@ public partial class GameStateModel
     private RealtimeArray<PlayerStateModel> _playerStates;
     // This list simulates a dictionary's keys for player IDs
     [RealtimeProperty(2, true, true)]
-    private List<int> _playerIDs = new List<int>();
+    private RealtimeArray<IntModel> _playerIDs;
 
-    public void getPlayerStates()
+    public RealtimeArray<PlayerStateModel> getPlayerStates()
     {
         return _playerStates;
     }
 
-    public void getPlayerIDs()
+    public RealtimeArray<IntModel> getPlayerIDs()
     {
         return _playerIDs;
     }
 
     public string EnterPlayer(int playerID)
     {
-        if (!_playerIDs.Contains(playerID))
+
+        if (!ContainsPlayerID(playerID))
         {
+            IntModel playerIdModel = new IntModel();
+            playerIdModel.value = playerID;
             var newPlayerState = new PlayerStateModel();
             newPlayerState.health = 100;
             newPlayerState.powerUpType = 0;
             newPlayerState.statusEffectType = 0;
             newPlayerState.statusEffectDuration = 0;
             _playerStates.Add(newPlayerState);
-            _playerIDs.Add(playerID);
+            _playerIDs.Add(playerIdModel);
             return "Player added.";
         }
         else
@@ -125,8 +128,22 @@ public partial class GameStateModel
         int index = GetPlayerIndex(playerID);
         if (index != -1)
         {
-            _playerStates.RemoveAt(index);
-            _playerIDs.RemoveAt(index);
+            // Create a new realtimearray and remove the player from the list
+            RealtimeArray<PlayerStateModel> newPlayerStates = new RealtimeArray<PlayerStateModel>();
+            RealtimeArray<IntModel> newPlayerIDs = new RealtimeArray<IntModel>();
+
+            for (int i = 0; i < _playerStates.Count; i++)
+            {
+                if (i != index)
+                {
+                    newPlayerStates.Add(_playerStates[i]);
+                    newPlayerIDs.Add(_playerIDs[i]);
+                }
+            }
+
+            _playerStates = newPlayerStates;
+            _playerIDs = newPlayerIDs;
+
         }
         else
         {
@@ -154,6 +171,40 @@ public partial class GameStateModel
                 }
             }
         }
+    }
+
+    public bool ContainsPlayerID(int playerID)
+    {
+        foreach (IntModel intModel in _playerIDs)
+        {
+            if (intModel.value == playerID) // Assuming `value` is the public property in IntModel
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int GetPlayerIndex(int playerID)
+    {
+        for (int i = 0; i < _playerIDs.Count; i++)
+        {
+            if (_playerIDs[i].value == playerID)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public RealtimeArray<PlayerStateModel> getAllPlayerStates()
+    {
+        return _playerStates;
+    }
+
+    public RealtimeArray<IntModel> getAllPlayerIDs()
+    {
+        return _playerIDs;
     }
 
 }
