@@ -24,7 +24,7 @@ public class ScoreDisplay : MonoBehaviour
     {
         if (textMesh != null) // Check if the TextMeshPro component is assigned
         {
-            textMesh.text = "Score: " + Score.ToString(); // Update the display text
+            textMesh.text = Score.ToString(); // Update the display text
         }
     }
 

@@ -194,6 +194,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ae532452a864e5dbb3324a14c6c2ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 8415750915069643041, guid: f973b8f5f5274453f9f86b4361db29c9,
+    type: 3}
   proximityDistance: 1
 --- !u!1 &7109895525207862144
 GameObject:

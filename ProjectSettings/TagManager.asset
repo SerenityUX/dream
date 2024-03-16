@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Path
   - realTime
+  - scoreText
   layers:
   - Default
   - TransparentFX

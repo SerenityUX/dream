@@ -3,11 +3,28 @@ using UnityEngine;
 
 public class CoinCapture : MonoBehaviour
 {
+
+    private ScoreDisplay scoreDisplay; // Reference to the ScoreDisplay component
     private RealtimeView _realtimeView; // Used to access the Realtime component
     public float proximityDistance = 1f; // Distance within which the object will be destroyed
 
     void Start()
     {
+        // Find the GameObject with the "scoreText" tag and get the ScoreDisplay component from it
+        GameObject scoreTextGameObject = GameObject.FindGameObjectWithTag("scoreText");
+        if (scoreTextGameObject != null)
+        {
+            scoreDisplay = scoreTextGameObject.GetComponent<ScoreDisplay>();
+            if (scoreDisplay == null)
+            {
+                Debug.LogError("ScoreDisplay component not found on the object with 'scoreText' tag.");
+            }
+        }
+        else
+        {
+            Debug.LogError("'scoreText' tagged object not found. Ensure it's tagged correctly in the scene.");
+        }
+
         // Get the RealtimeView component attached to the object
         _realtimeView = GetComponent<RealtimeView>();
         if (_realtimeView == null)
@@ -62,6 +79,7 @@ public class CoinCapture : MonoBehaviour
 
     private void DestroyObject()
     {
+        scoreDisplay.IncreaseScore(1); // Increase the score using ScoreDisplay component
 
         // Destroy the GameObject this script is attached to
         Realtime.Destroy(gameObject); // Use Realtime.Destroy to properly handle networked object destruction
