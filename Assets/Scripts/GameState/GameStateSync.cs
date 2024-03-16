@@ -1,7 +1,6 @@
 using UnityEngine;
 using Normal.Realtime;
 using Normal.Realtime.Serialization;
-using Normal.Realtime;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
@@ -23,8 +22,11 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
             model.gameState = 2;
         }
 
-        // Update the status effects
-        UpdateStatusEffects();
+        // Only the first user can update the status effects
+        if (model.playerstates[(uint)realtime.clientID].first)
+        {
+            UpdateStatusEffects();
+        }
 
         // Get all the player states
         RealtimeDictionary<PlayerStateModel> playerStates = GetAllPlayerStates();
@@ -32,6 +34,14 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         // Get current player's ID
         uint playerID = (uint)realtime.clientID;
         PlayerStateModel playerState = model.playerstates[playerID];
+    }
+
+    protected override void OnRealtimeModelReplaced(GameStateModel previousModel, GameStateModel currentModel)
+    {
+        if (currentModel.isFreshModel)
+        {
+            currentModel.gameState = 0;
+        }
     }
 
     public float Time
