@@ -5,6 +5,9 @@ using Normal.Realtime.Serialization;
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
 
+    private ScoreDisplay _scoreDisplay;
+    // private LeaderboardDisplay _leaderboardDisplay;
+
     protected override void OnRealtimeModelReplaced(GameStateModel previousModel, GameStateModel currentModel)
     {
         if (previousModel != null)
@@ -39,10 +42,10 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         model.ExitPlayer(playerID);
     }
 
-    public void AddPointToPlayer(int playerID)
+    public void AddPointsToPlayer(int playerID, int points)
     {
         // Utilize the model's method
-        model.AddPoint(playerID);
+        model.AddPoints(playerID, points);
     }
 
     // Example method to add laps to a player
@@ -87,7 +90,7 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
 
     private void UpdatePersonal()
     {
-        // Update the personal stats
+        _scoreDisplay.setScore(model.GetPlayerState(Realtime.clientID()).points);
     }
 
     public RealtimeArray<PlayerStateModel> GetAllPlayerStates()

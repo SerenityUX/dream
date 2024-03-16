@@ -21,7 +21,7 @@ public partial class GameStateModel
         return _playerIDs;
     }
 
-    public string EnterPlayer(int playerID)
+    public string EnterPlayer(int playerID, string playerName)
     {
 
         if (!ContainsPlayerID(playerID))
@@ -30,6 +30,9 @@ public partial class GameStateModel
             playerIdModel.value = playerID;
             var newPlayerState = new PlayerStateModel();
             newPlayerState.health = 100;
+            newPlayerState.laps = 0;
+            newPlayerState.points = 0;
+            newPlayerState.name = playerName;
             newPlayerState.powerUpType = 0;
             newPlayerState.statusEffectType = 0;
             newPlayerState.statusEffectDuration = 0;
@@ -44,12 +47,12 @@ public partial class GameStateModel
         }
     }
 
-    public void AddPoint(int playerID)
+    public void AddPoints(int playerID, int points)
     {
         int index = GetPlayerIndex(playerID);
         if (index != -1)
         {
-            _playerStates[index].points++;
+            _playerStates[index].points += points;
         }
         else
         {
@@ -195,6 +198,20 @@ public partial class GameStateModel
             }
         }
         return -1;
+    }
+
+    public int GetPlayerState(int playerID)
+    {
+        int index = GetPlayerIndex(playerID);
+        if (index != -1)
+        {
+            return _playerStates[index];
+        }
+        else
+        {
+            Debug.LogError("Player not found.");
+            return -1;
+        }
     }
 
     public RealtimeArray<PlayerStateModel> getAllPlayerStates()

@@ -20,6 +20,9 @@ public partial class PlayerStateModel
     [RealtimeProperty(3, true, true)]
     private int _health;
 
+    [RealtimeProperty(4, true, true)]
+    private int _name;
+
 
     [RealtimeProperty(5, true, true)]
     private int _powerUpType;
@@ -28,6 +31,4 @@ public partial class PlayerStateModel
     private int _statusEffectType;
     [RealtimeProperty(7, true, true)]
     private float _statusEffectDuration;
-
-
 }
