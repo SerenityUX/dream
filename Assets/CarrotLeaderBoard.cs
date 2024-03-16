@@ -57,40 +57,46 @@ public class CarrotLeaderBoard : MonoBehaviour
 
     private void Update()
     {
-        List<Tuple<string, int>> sortedPlayerStates = _gameStateSync.GetPlayerNamesAndPoints();
-
-        for (int i = 0; i < gamePropertiesArray.Length; i++)
+        try
         {
-            var nameText = gamePropertiesArray[i]?.name?.GetComponent<TextMeshPro>();
-            var scoreText = gamePropertiesArray[i]?.score?.GetComponent<TextMeshPro>();
+            List<Tuple<string, int>> sortedPlayerStates = _gameStateSync.GetPlayerNamesAndPoints();
 
-            if (i < sortedPlayerStates.Count)
+            for (int i = 0; i < gamePropertiesArray.Length; i++)
             {
-                if (nameText != null)
-                    nameText.text = sortedPlayerStates[i].Item1;
+                var nameText = gamePropertiesArray[i]?.name?.GetComponent<TextMeshPro>();
+                var scoreText = gamePropertiesArray[i]?.score?.GetComponent<TextMeshPro>();
+
+                if (i < sortedPlayerStates.Count)
+                {
+                    if (nameText != null)
+                        nameText.text = sortedPlayerStates[i].Item1;
+                    else
+                        nameText.text = "";
+
+                    if (scoreText != null)
+                        scoreText.text = sortedPlayerStates[i].Item2.ToString();
+                    else
+                        scoreText.text = "";
+
+                    if (gamePropertiesArray[i]?.carrotIcon != null)
+                        gamePropertiesArray[i].carrotIcon.SetActive(true);
+                }
                 else
-                    nameText.text = "";
+                {
+                    if (nameText != null)
+                        nameText.text = "";
 
-                if (scoreText != null)
-                    scoreText.text = sortedPlayerStates[i].Item2.ToString();
-                else
-                    scoreText.text = "";
+                    if (scoreText != null)
+                        scoreText.text = "";
 
-                if (gamePropertiesArray[i]?.carrotIcon != null)
-                    gamePropertiesArray[i].carrotIcon.SetActive(true);
-            }
-            else
-            {
-                if (nameText != null)
-                    nameText.text = "";
-
-                if (scoreText != null)
-                    scoreText.text = "";
-
-                if (gamePropertiesArray[i]?.carrotIcon != null)
-                    gamePropertiesArray[i].carrotIcon.SetActive(false);
+                    if (gamePropertiesArray[i]?.carrotIcon != null)
+                        gamePropertiesArray[i].carrotIcon.SetActive(false);
+                }
             }
         }
+        catch (Exception e)
+        {
+            Debug.Log($"Error in Update method: {e.Message}");
+        }
     }
-
 }

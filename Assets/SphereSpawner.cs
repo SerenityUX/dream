@@ -88,55 +88,55 @@ public class SphereSpawner : MonoBehaviour
     }
     void GenerateCoins()
     {
-        StartCoroutine(SendSpheresData());
-
-
         _gameStateSync.AddPointsToPlayer(1);
         Debug.Log("Generate coins");
         GameObject[] pathPoints = GameObject.FindGameObjectsWithTag("Path");
-
-        // Optionally, sort pathPoints by some criteria (e.g., name or position)
-        // System.Array.Sort(pathPoints, (p1, p2) => string.Compare(p1.name, p2.name));
 
         for (int i = 0; i < pathPoints.Length - 1; i++)
         {
             Vector3 start = pathPoints[i].transform.position;
             Vector3 end = pathPoints[i + 1].transform.position;
-            float distance = Vector3.Distance(start, end);
             Vector3 direction = (end - start).normalized;
 
-            // Calculate how many coins can fit between these points
-            int coinsCount = Mathf.FloorToInt(distance / coinSpacing);
-            for (int j = 0; j < coinsCount; j++)
+            // Calculate the midpoint between the two path points
+            Vector3 midpoint = (start + end) / 2f;
+
+            // Calculate the perpendicular direction to the path
+            Vector3 perpendicularDirection = Vector3.Cross(direction, Vector3.up).normalized;
+
+            // Instantiate coins on both sides of the path
+            InstantiateCoinRow(midpoint, perpendicularDirection, 3); // 3 coins per row
+        }
+    }
+
+    void InstantiateCoinRow(Vector3 centerPosition, Vector3 rowDirection, int coinsCount)
+    {
+        float rowSpacing = 0.5f; // Distance between coins in a row
+
+        for (int j = 0; j < coinsCount; j++)
+        {
+            // Calculate position for each coin in the row
+            Vector3 coinPosition = centerPosition + rowDirection * (j - coinsCount / 2) * rowSpacing;
+
+            // Offset the position 1 unit down in the y-direction
+            coinPosition.y -= 0.4f;
+
+            // Instantiate the coin
+            GameObject coin = Realtime.Instantiate("Carrot", coinPosition, Quaternion.identity);
+
+            // Set the parent GameObject
+            GameObject realTimeParent = GameObject.FindGameObjectWithTag("realTime");
+            if (realTimeParent != null)
             {
-                // Calculate the position for each coin
-                Vector3 coinPosition = start + direction * (j + 1) * coinSpacing;
-
-                // Offset the position 1 unit down in the y-direction
-                coinPosition.y -= 0.4f;
-
-                float chance = UnityEngine.Random.Range(0.0f, 1.0f);
-
-                // Only instantiate the coin if the random number is less than 0.6
-                if (chance < 0.6f)
-                {
-                    GameObject coin = Realtime.Instantiate("Carrot", coinPosition, Quaternion.identity);
-
-                    // Find the parent GameObject with the "realTime" tag
-                    GameObject realTimeParent = GameObject.FindGameObjectWithTag("realTime");
-                    if (realTimeParent != null)
-                    {
-                        // Set the coin's parent to the found GameObject
-                        coin.transform.SetParent(realTimeParent.transform);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("No GameObject found with the 'realTime' tag. Coin instantiated without a parent.");
-                    }
-                }
+                coin.transform.SetParent(realTimeParent.transform);
+            }
+            else
+            {
+                Debug.LogWarning("No GameObject found with the 'realTime' tag. Coin instantiated without a parent.");
             }
         }
     }
+
 
 
 
@@ -154,32 +154,32 @@ public class SphereSpawner : MonoBehaviour
         SaveSpheresToJson();
     }
 
-    IEnumerator SendSpheresData()
-    {
-        SpheresCollection collection = new SpheresCollection { spheres = this.spheres };
+    //IEnumerator SendSpheresData()
+    //{
+    //    SpheresCollection collection = new SpheresCollection { spheres = this.spheres };
 
-        // Randomly generate a name consisting of 4 digits
-        string name = UnityEngine.Random.Range(1000, 9999).ToString();
+    //    // Randomly generate a name consisting of 4 digits
+    //    string name = UnityEngine.Random.Range(1000, 9999).ToString();
 
-        // Serialize the data to JSON
-        string jsonData = JsonUtility.ToJson(new { name = name, path = collection });
+    //    // Serialize the data to JSON
+    //    string jsonData = JsonUtility.ToJson(new { name = name, path = collection });
 
-        // Create a UnityWebRequest to POST the JSON data
-        using (UnityWebRequest www = UnityWebRequest.PostWwwForm("https://x8ki-letl-twmt.n7.xano.io/api:7v6zckRK/paths", jsonData))
-        {
-            www.SetRequestHeader("Content-Type", "application/json");
+    //    // Create a UnityWebRequest to POST the JSON data
+    //    using (UnityWebRequest www = UnityWebRequest.PostWwwForm("https://x8ki-letl-twmt.n7.xano.io/api:7v6zckRK/paths", jsonData))
+    //    {
+    //        www.SetRequestHeader("Content-Type", "application/json");
 
-            // Send the request and wait for a response
-            yield return www.SendWebRequest();
+    //        // Send the request and wait for a response
+    //        yield return www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Error sending spheres data: " + www.error);
-            }
-            else
-            {
-                Debug.Log("Successfully sent spheres data. Response: " + www.downloadHandler.text);
-            }
-        }
-    }
+    //        if (www.result != UnityWebRequest.Result.Success)
+    //        {
+    //            Debug.LogError("Error sending spheres data: " + www.error);
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("Successfully sent spheres data. Response: " + www.downloadHandler.text);
+    //        }
+    //    }
+    //}
 }
