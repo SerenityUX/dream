@@ -50,6 +50,26 @@ public class EnvironmentSync : RealtimeComponent<EnvironmentStateModel>
         model.AddPowerUp(position, type);
     }
 
+    public void RemoveCoin(int index)
+    {
+        model.RemoveCoin(index);
+    }
+
+    public void RemovePowerUp(int index)
+    {
+        model.RemovePowerUp(index);
+    }
+
+    public RealtimeArray<CoinModel> GetCoins()
+    {
+        return model.getCoins();
+    }
+
+    public RealtimeArray<PowerUpModel> GetPowerUps()
+    {
+        return model.getPowerUps();
+    }
+
     // Define the structure to match your JSON data
     [System.Serializable]
     private class EnvironmentData

@@ -11,5 +11,8 @@ public partial class CoinModel
     [RealtimeProperty(2, true, true)]
     private string _type;
 
+    [RealtimeProperty(3, true, true)]
+    private bool _active;
+
     // Additional properties or methods as needed
 }

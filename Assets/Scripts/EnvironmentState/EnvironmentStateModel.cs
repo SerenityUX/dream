@@ -16,6 +16,7 @@ public partial class EnvironmentStateModel
         CoinModel coin = new CoinModel();
         coin.position = position;
         coin.type = type;
+        coin.active = true;
 
         _coins.Add(coin);
     }
@@ -25,7 +26,30 @@ public partial class EnvironmentStateModel
         PowerUpModel powerUp = new PowerUpModel();
         powerUp.position = position;
         powerUp.type = type;
+        powerUp.active = true;
 
         _powerUps.Add(powerUp);
+    }
+
+    public void RemoveCoin(int index)
+    {
+        // Set to inactive instead of removing to avoid index issues
+        _coins[index].active = false;
+    }
+
+    public void RemovePowerUp(int index)
+    {
+        // Set to inactive instead of removing to avoid index issues
+        _powerUps[index].active = false;
+    }
+
+    public RealtimeArray<CoinModel> getCoins()
+    {
+        return _coins;
+    }
+
+    public RealtimeArray<PowerUpModel> getPowerUps()
+    {
+        return _powerUps;
     }
 }
