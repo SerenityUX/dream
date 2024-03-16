@@ -2,11 +2,37 @@ using Normal.Realtime; // Normcore namespace
 using UnityEngine;
 public class CoinCapture : MonoBehaviour
 {
+    
+    private GameStateSync _gameStateSync; // Reference to the ScoreDisplay component
+
+    
+
     private ScoreDisplay scoreDisplay; // Reference to the ScoreDisplay component
     private RealtimeView _realtimeView; // Used to access the Realtime component
     public float proximityDistance = 1f; // Distance within which the object will be destroyed
+
+    private void Awake()
+    {
+        // Find the game object with the tag "sync"
+        GameObject syncGameObject = GameObject.FindWithTag("sync");
+
+        // Ensure the game object was found
+        if (syncGameObject != null)
+        {
+            // Get the GameStateSync component from the found game object
+            _gameStateSync = syncGameObject.GetComponent<GameStateSync>();
+        }
+        else
+        {
+            Debug.LogError("GameObject with tag 'sync' not found.");
+        }
+    }
+
     void Start()
     {
+
+
+
         // Find the GameObject with the "scoreText" tag and get the ScoreDisplay component from it
         GameObject scoreTextGameObject = GameObject.FindGameObjectWithTag("scoreText");
         if (scoreTextGameObject != null)
@@ -70,7 +96,9 @@ public class CoinCapture : MonoBehaviour
     }
     private void DestroyObject()
     {
-        scoreDisplay.IncreaseScore(1); // Increase the score using ScoreDisplay component
+        _gameStateSync.AddPointsToPlayer(1);
+        //Debug.Log(_gameStateSync.GetPlayerPoints());
+        //scoreDisplay.IncreaseScore(1); // Increase the score using ScoreDisplay component
         // Destroy the GameObject this script is attached to
         Realtime.Destroy(gameObject); // Use Realtime.Destroy to properly handle networked object destruction
     }

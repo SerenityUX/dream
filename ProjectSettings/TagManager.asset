@@ -9,6 +9,7 @@ TagManager:
   - scoreText
   - Carrot
   - HUD
+  - sync
   layers:
   - Default
   - TransparentFX

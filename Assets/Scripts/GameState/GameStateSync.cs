@@ -6,6 +6,17 @@ using System;
 
 public class GameStateSync : RealtimeComponent<GameStateModel>
 {
+    private void Start()
+    {
+        Invoke("EnterPlayerDelayed", 3f); // Calls EnterPlayerDelayed after 5 seconds
+    }
+
+    private void EnterPlayerDelayed()
+    {
+        EnterPlayer("ralph");
+        AddPointsToPlayer(1);
+
+    }
     // Update function, called once per frame
     private void Update()
     {
@@ -94,7 +105,14 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     // Public method to interact with the GameStateModel
     public string EnterPlayer(string name)
     {
+        Debug.Log(realtime.clientID);
+
+        if(realtime.clientID < 0)
+        {
+            return null;
+        }
         uint playerID = (uint)realtime.clientID;
+        
         return model.EnterPlayer(playerID, name);
     }
 
@@ -108,7 +126,29 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
     {
         uint playerID = (uint)realtime.clientID;
         // Utilize the model's method
-        model.AddPoints(playerID, points);
+        Debug.Log(realtime.clientID);
+        if (model.playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
+        {
+            if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.DoublePoints)
+            {
+                playerState.points += points * 2;
+            }
+            else if ((StatusEffectType)playerState.statusEffectType == StatusEffectType.HalfPoints)
+            {
+                playerState.points += points / 2;
+            }
+            else
+            {
+                playerState.points += points;
+            }
+            Debug.Log("Adding");
+            Debug.Log(playerID);
+        }
+        else
+        {
+            Debug.Log("Invalid player ID.");
+            Debug.LogError(playerID);
+        }
     }
 
     // Example method to add laps to a player
@@ -215,12 +255,14 @@ public class GameStateSync : RealtimeComponent<GameStateModel>
         uint playerID = (uint)realtime.clientID;
         if (model.playerstates.TryGetValue(playerID, out PlayerStateModel playerState))
         {
+            Debug.Log(playerID);
+            Debug.Log(playerState.points);
             return playerState.points;
         }
         else
         {
-            Debug.LogError("Invalid player ID.");
-            return 0;
+            Debug.Log(realtime.clientID);
+            return -1;
         }
     }
 }
