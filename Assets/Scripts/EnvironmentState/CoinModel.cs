@@ -9,7 +9,10 @@ public partial class CoinModel
     private Vector3 _position;
 
     [RealtimeProperty(2, true, true)]
-    private int _type;
+    private string _type;
+
+    [RealtimeProperty(3, true, true)]
+    private bool _active;
 
     // Additional properties or methods as needed
 }
