@@ -27,9 +27,15 @@ Collect carrots, compete tot get the most before the other person and win!
 
 <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/816/657/datas/gallery.jpg" alt="alt text" width="400" height="auto"/>
 
+Don't like photos? check out the videos!:
+[Bikstar on Devpost](https://devpost.com/software/bikstar?ref_content=user-portfolio&ref_feature=in_progress)
+[Check out the Demos](https://www.youtube.com/watch?v=d_aby7ZvOmo&t=1s)
+[Minivlog](https://www.youtube.com/watch?v=_nRfPUoAeXU)
+
+
 <br>
 
-# The End. (the event)
+# The End.
 DreamXR was an awesome hackathon, teaming upt to build this was a blast! Also Thank you Founders, inc for an awesome event!
 <br>
 
